@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
+import { Button } from "../components/Button";
 
 const Login = () => {
   const [userData, setUserData] = useState({
     username: "",
     password: "",
   });
+  const router = useRouter();
 
   const handleInputChange = (e) => {
     const { name, value } = e.currentTarget;
@@ -22,9 +25,11 @@ const Login = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+    }).then((response) => {
+      if (response.status === 200) {
+        router.push("/dashboard/usuarios");
+      }
+    });
   };
 
   return (
@@ -41,7 +46,7 @@ const Login = () => {
         placeholder="password"
         onChange={handleInputChange}
       />
-      <button>Ingresar</button>
+      <Button label={"Ingresar"} />
     </form>
   );
 };
